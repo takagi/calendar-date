@@ -1,0 +1,31 @@
+machine:
+  environment:
+    LISP: sbcl
+    PATH: ~/.roswell/bin:$PATH
+    COVERALLS: true
+
+checkout:
+  pre:
+    - curl -L https://raw.githubusercontent.com/snmsts/roswell/master/scripts/install-for-ci.sh | sh
+
+dependencies:
+  pre:
+    - ros install qlot
+    - ros install prove
+    - git clone https://github.com/fukamachi/cl-coveralls ~/lisp/cl-coveralls
+
+  override:
+    - if [ -e qlfile ]; then qlot install; fi;
+    - echo "(ros:ignore-shebang)" >> ~/.roswell/init.lisp
+
+  cache_directories:
+    - ~/.roswell
+    - quicklisp
+
+test:
+  override:
+    - ros run -- --version
+    - ros -s prove -s cl-coveralls
+          -e '(or (coveralls:with-coveralls (:exclude (list "t" "quicklisp"))
+                    (prove:run :calendar-date-test))
+                  (uiop:quit -1))'
