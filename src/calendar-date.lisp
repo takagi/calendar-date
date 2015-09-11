@@ -14,8 +14,8 @@
            :previous-week
            :next-month
            :previous-month
-           :first-of-next-month
            :first-of-the-month
+           :first-of-next-month
            :first-of-previous-month
            :nth-of-the-month
            :nth-of-the-month-in-business
