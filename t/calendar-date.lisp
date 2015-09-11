@@ -44,6 +44,26 @@
             type-error
             "invalid calendar date."))
 
+(subtest "beginning-of-the-month"
+
+  (is (calendar-date::beginning-of-the-month (calendar-date 2015 1 1))
+      (calendar-date 2015 1 1)
+      :test #'calendar-date=)
+
+  (is-error (calendar-date::beginning-of-the-month :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "beginning-of-next-month"
+
+  (is (beginning-of-next-month (calendar-date 2015 1 1))
+      (calendar-date 2015 2 1)
+      :test #'calendar-date=)
+
+  (is-error (beginning-of-next-month :foo)
+            type-error
+            "invalid calendar date."))
+
 (subtest "nth-of-the-month"
 
   (is (nth-of-the-month 1 (calendar-date 2015 1 1))
