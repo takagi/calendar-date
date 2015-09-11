@@ -14,17 +14,14 @@
            :previous-week
            :next-month
            :previous-month
-           :beginning-of-next-month
+           :first-of-next-month
+           :first-of-the-month
+           :first-of-previous-month
            :nth-of-the-month
            :nth-of-the-month-in-business
            :last-day-of-the-month))
 (in-package :calendar-date)
 
-
-(defstruct (calendar-date (:constructor %make-calendar-date))
-  (year :year :type integer :read-only t)
-  (month :month :type integer :read-only t)
-  (day :day :type integer :read-only t))
 
 (defun leap-year-p (year)
   (and (= (mod year 4) 0)
@@ -41,6 +38,11 @@
   (check-type month (integer 1 12))
   (nth (1- month) '("Jan." "Feb." "Mar." "Apr." "May." "Jun."
                     "Jul." "Aug." "Sep." "Oct." "Nov." "Dec.")))
+
+(defstruct (calendar-date (:constructor %make-calendar-date))
+  (year :year :type integer :read-only t)
+  (month :month :type integer :read-only t)
+  (day :day :type integer :read-only t))
 
 (defun calendar-date (year month day)
   (check-type year (integer 0 9999))
@@ -108,38 +110,36 @@
 
 (defun next-month (calendar-date)
   (let ((day (calendar-date-day calendar-date)))
-    (let ((calendar-date1 (next-day
-                           (last-day-of-the-month calendar-date))))
-      (loop
-         until (multiple-value-bind (year1 month1 day1)
-                   (calendar-date-values calendar-date1)
-                 (or (= day day1)
-                     (= day1 (last-day-of-year-month year1 month1))))
-         do (setf calendar-date1 (next-day calendar-date1)))
-      calendar-date1)))
+    (let ((calendar-date1 (first-of-next-month calendar-date)))
+      (multiple-value-bind (year1 month1 day1)
+          (calendar-date-values calendar-date1)
+        (declare (ignore day1))
+        (let ((nth (min day (last-day-of-year-month year1 month1))))
+          (nth-of-the-month nth calendar-date1))))))
 
 (defun previous-month (calendar-date)
   (let ((day (calendar-date-day calendar-date)))
-    (let ((calendar-date1 (beginning-of-the-month
-                           (previous-day
-                            (beginning-of-the-month calendar-date)))))
-      (loop
-         until (multiple-value-bind (year1 month1 day1)
-                   (calendar-date-values calendar-date1)
-                 (or (= day day1)
-                     (= day1 (last-day-of-year-month year1 month1))))
-         do (setf calendar-date1 (next-day calendar-date1)))
-      calendar-date1)))
+    (let ((calendar-date1 (first-of-previous-month calendar-date)))
+      (multiple-value-bind (year1 month1 day1)
+          (calendar-date-values calendar-date1)
+        (declare (ignore day1))
+        (let ((nth (min day (last-day-of-year-month year1 month1))))
+          (nth-of-the-month nth calendar-date1))))))
 
-(defun beginning-of-the-month (calendar-date)
+(defun first-of-the-month (calendar-date)
   (multiple-value-bind (year month day)
       (calendar-date-values calendar-date)
     (declare (ignore day))
     (calendar-date year month 1)))
 
-(defun beginning-of-next-month (calendar-date)
-  (beginning-of-the-month
-   (next-month calendar-date)))
+(defun first-of-next-month (calendar-date)
+  (next-day
+   (last-day-of-the-month calendar-date)))
+
+(defun first-of-previous-month (calendar-date)
+  (first-of-the-month
+   (previous-day
+    (first-of-the-month calendar-date))))
 
 (defun nth-of-the-month (nth calendar-date)
   (check-type nth (integer 1 31))
@@ -147,18 +147,11 @@
     (declare (ignore day))
     (unless (<= nth (last-day-of-year-month year month))
       (error "~A ~S does not have day ~S." (month-name month) year nth)))
-  (let ((calendar-date1 (beginning-of-the-month calendar-date)))
-    (loop
-       until (= nth (calendar-date-day calendar-date1))
-       do (setf calendar-date1 (next-day calendar-date1)))
-    calendar-date1))
-
-(defun nth-of-the-month-in-business (nth calendar-date)
-  (check-type nth (integer 1 31))
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (declare (ignore day))
-    (unless (<= nth (last-day-of-year-month year month))
-      (error "~A ~S does not have day ~S." (month-name month) year nth)))
+    (calendar-date year month nth)))
+
+(defun nth-of-the-month-in-business (nth calendar-date)
   (let ((calendar-date1 (nth-of-the-month nth calendar-date)))
     (loop
        until (business-day-p calendar-date1)
@@ -166,10 +159,7 @@
     calendar-date1))
 
 (defun last-day-of-the-month (calendar-date)
-  (loop
-     until (multiple-value-bind (year month day)
-               (calendar-date-values calendar-date)
-             (= day
-                (last-day-of-year-month year month)))
-     do (setf calendar-date (next-day calendar-date)))
-  calendar-date)
+  (multiple-value-bind (year month day) (calendar-date-values calendar-date)
+    (declare (ignore day))
+    (let ((day1 (last-day-of-year-month year month)))
+      (calendar-date year month day1))))

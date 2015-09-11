@@ -67,9 +67,9 @@ Calendar-date is a calendar date library in Common Lisp.
 
     PREVIOUS-WEEK calendar-date => new-calendar-date
 
-### [Function] beginning-of-next-week
+### [Function] first-of-next-week
 
-    BEGINNING-OF-NEXT-WEEK calendar-date => new-calendar-date
+    FIRST-OF-NEXT-WEEK calendar-date => new-calendar-date
 
 ### [Function] day-of-the-week
 
@@ -83,9 +83,17 @@ Calendar-date is a calendar date library in Common Lisp.
 
     PREVIOUS-MONTH calendar-date => new-calendar-date
 
-### [Function] beginning-of-next-month
+### [Function] first-of-the-month
 
-    BEGINNING-OF-NEXT-MONTH calendar-date => new-calendar-date
+    FIRST-OF-THE-MONTH calendar-date => new-calendar-date
+
+### [Function] first-of-next-month
+
+    FIRST-OF-NEXT-MONTH calendar-date => new-calendar-date
+
+### [Function] first-of-previous-month
+
+    FIRST-OF-PREVIOUS-MONTH calendar-date => new-calendar-date
 
 ### [Function] nth-of-the-month
 
