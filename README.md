@@ -31,6 +31,18 @@ Calendar-date is a calendar date library in Common Lisp.
 
     CALENDAR-DATE-VALUES calendar-date => year, month, day
 
+### [Function] business-day-p
+
+    BUSINESS-DAY-P calendar-date => generalized-boolean
+
+### [Function] week-day-p
+
+    WEEK-DAY-P calendar-date => generalized-boolean
+
+### [Function] week-end-p
+
+    WEEK-END-P calendar-date => generalized-boolean
+
 ### [Function] next-day
 
     NEXT-DAY calendar-date => new-calendar-date
