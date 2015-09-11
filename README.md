@@ -9,6 +9,72 @@ Calendar-date is a calendar date library in Common Lisp.
 
 ## Installation
 
+## API
+
+### [Function] calendar-date
+
+    CALENDAR-DATE year month day => new-calendar-date
+
+### [Function] calendar-date-year
+
+    CALENDAR-DATE-YEAR calendar-date => year
+
+### [Function] calendar-date-month
+
+    CALENDAR-DATE-MONTH calendar-date => month
+
+### [Function] calendar-date-day
+
+    CALENDAR-DATE-DAY calendar-date => day
+
+### [Function] calendar-date-values
+
+    CALENDAR-DATE-VALUES calendar-date => year, month, day
+
+### [Function] next-day
+
+    NEXT-DAY calendar-date => new-calendar-date
+
+### [Function] next-week
+
+    NEXT-WEEK calendar-date => new-calendar-date
+
+### [Function] beginning-of-next-week
+
+    BEGINNING-OF-NEXT-WEEK calendar-date => new-calendar-date
+
+### [Function] day-of-the-week
+
+    DAY-OF-THE-WEEK day-of-week calendar-date => new-calendar-date
+
+### [Function] next-month
+
+    NEXT-MONTH calendar-date => new-calendar-date
+
+### [Function] beginning-of-next-month
+
+    BEGINNING-OF-NEXT-MONTH calendar-date => new-calendar-date
+
+### [Function] nth-of-the-month
+
+    NTH-OF-THE-MONTH nth calendar-date => new-calendar-date
+
+### [Function] nth-of-the-month-in-business
+
+    NTH-OF-THE-MONTH-IN-BUSINESS nth calendar-date => new-calendar-date
+
+### [Function] nth-business-day-of-the-month
+
+    NTH-BUSINESS-DAY-OF-THE-MONTH nth calendar-date => new-calendar-date
+
+### [Function] last-day-of-the-month
+
+    LAST-DAY-OF-THE-MONTH calendar-date => new-calendar-date
+
+### [Function] last-business-day-of-the-month
+
+    LAST-BUSINESS-DAY-OF-THE-MONTH calendar-date => new-calendar-date
+
 ## Author
 
 * Masayuki Takagi (kamonama@gmail.com)
