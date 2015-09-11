@@ -8,6 +8,86 @@
 
 (plan nil)
 
+(subtest "leap-year-p"
+
+  (is (calendar-date::leap-year-p 2015)
+      nil)
+
+  (is (calendar-date::leap-year-p 2016)
+      t)
+
+  (is (calendar-date::leap-year-p 1900)
+      nil)
+
+  (is (calendar-date::leap-year-p 2000)
+      t))
+
+(subtest "last-day-of-the-month"
+
+  (is (calendar-date::last-day-of-year-month 2015 1)
+      31)
+
+  (is (calendar-date::last-day-of-year-month 2015 4)
+      30)
+
+  (is (calendar-date::last-day-of-year-month 2015 2)
+      28)
+
+  (is (calendar-date::last-day-of-year-month 2016 2)
+      29))
+
+(subtest "month-name"
+
+  (is (calendar-date::month-name 1)
+      "Jan."
+      :test #'string=)
+
+  (is (calendar-date::month-name 12)
+      "Dec."
+      :test #'string=)
+
+  (is-error (calendar-date::month-name 0)
+            type-error
+            "invalid month.")
+
+  (is-error (calendar-date::month-name :foo)
+            type-error
+            "invalid month."))
+
+(subtest "calendar-date="
+
+  (is (calendar-date= (calendar-date 2015 1 1)
+                      (calendar-date 2015 1 1))
+      t)
+
+  (is (calendar-date= (calendar-date 2015 1 1)
+                      (calendar-date 2015 1 2))
+      nil)
+
+  (is (calendar-date= (calendar-date 2015 1 1)
+                      (calendar-date 2015 2 1))
+      nil)
+
+  (is (calendar-date= (calendar-date 2015 1 1)
+                      (calendar-date 2016 1 1))
+      nil)
+
+  (is-error (calendar-date= :foo (calendar-date 2015 1 1))
+            type-error
+            "invalid calendar date.")
+
+  (is-error (calendar-date= (calendar-date 2015 1 1) :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "print-object"
+
+  (is-print (princ (calendar-date 2015 1 1))
+            "#<CALENDAR-DATE 2015-01-01>")
+
+  (is-print (prin1 (calendar-date 2015 1 1))
+            "#<CALENDAR-DATE 2015-01-01>"))
+
 (subtest "next-day"
 
   (is (next-day (calendar-date 2015 1 1))
