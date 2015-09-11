@@ -8,6 +8,58 @@
 
 (plan nil)
 
+(subtest "next-day"
+
+  (is (next-day (calendar-date 2015 1 1))
+      (calendar-date 2015 1 2)
+      :test #'calendar-date=)
+
+  (is (next-day (calendar-date 2015 1 31))
+      (calendar-date 2015 2 1)
+      :test #'calendar-date=)
+
+  (is (next-day (calendar-date 2015 12 31))
+      (calendar-date 2016 1 1)
+      :test #'calendar-date=)
+
+  (is (next-day (calendar-date 2015 2 28))
+      (calendar-date 2015 3 1)
+      :test #'calendar-date=)
+
+  (is (next-day (calendar-date 2016 2 28))
+      (calendar-date 2016 2 29)
+      :test #'calendar-date=)
+
+  (is-error (next-day :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "previous-day"
+
+  (is (previous-day (calendar-date 2015 1 2))
+      (calendar-date 2015 1 1)
+      :test #'calendar-date=)
+
+  (is (previous-day (calendar-date 2015 2 1))
+      (calendar-date 2015 1 31)
+      :test #'calendar-date=)
+
+  (is (previous-day (calendar-date 2016 1 1))
+      (calendar-date 2015 12 31)
+      :test #'calendar-date=)
+
+  (is (previous-day (calendar-date 2015 3 1))
+      (calendar-date 2015 2 28)
+      :test #'calendar-date=)
+
+  (is (previous-day (calendar-date 2016 3 1))
+      (calendar-date 2016 2 29)
+      :test #'calendar-date=)
+
+  (is-error (previous-day :foo)
+            type-error
+            "invalid calendar date."))
+
 (subtest "next-month"
 
   (is (next-month (calendar-date 2015 1 1))
