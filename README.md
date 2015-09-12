@@ -43,13 +43,13 @@ Calendar-date is a Gregorian calendar date library in Common Lisp.
 
     BUSINESS-DAY-P calendar-date => generalized-boolean
 
-### [Function] week-day-p
+### [Function] weekday-p
 
-    WEEK-DAY-P calendar-date => generalized-boolean
+    WEEKDAY-P calendar-date => generalized-boolean
 
-### [Function] week-end-p
+### [Function] weekend-p
 
-    WEEK-END-P calendar-date => generalized-boolean
+    WEEKEND-P calendar-date => generalized-boolean
 
 ### [Function] next-day
 

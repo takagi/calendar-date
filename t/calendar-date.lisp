@@ -54,6 +54,48 @@
             type-error
             "invalid month."))
 
+(subtest "day-of-week"
+
+  ;; Day in ordinal year.
+  (is (calendar-date::day-of-week 2015 1 1)
+      4)
+
+  ;; Day before March in leap year.
+  (is (calendar-date::day-of-week 2016 1 1)
+      5)
+
+  ;; Day on March or after in leap year.
+  (is (calendar-date::day-of-week 2016 3 1)
+      2)
+
+  (is-error (calendar-date::day-of-week -1 1 1)
+            type-error
+            "invalid year.")
+
+  (is-error (calendar-date::day-of-week 10000 1 1)
+            type-error
+            "invalid year.")
+
+  (is-error (calendar-date::day-of-week 2015 0 1)
+            type-error
+            "invalid month.")
+
+  (is-error (calendar-date::day-of-week 2015 13 1)
+            type-error
+            "invalid month.")
+
+  (is-error (calendar-date::day-of-week 2015 1 0)
+            type-error
+            "invalid day.")
+
+  (is-error (calendar-date::day-of-week 2015 1 32)
+            type-error
+            "invalid day.")
+
+  (is-error (calendar-date::day-of-week 2015 2 29)
+            simple-error
+            "invalid day."))
+
 (subtest "calendar-date"
   )
 
@@ -86,6 +128,51 @@
             "invalid calendar date.")
 
   (is-error (calendar-date= (calendar-date 2015 1 1) :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "business-day-p"
+
+  (is (business-day-p (calendar-date 2015 1 1))
+      t)
+
+  (is (business-day-p (calendar-date 2015 1 3))
+      nil)
+
+  (is (business-day-p (calendar-date 2015 1 4))
+      nil)
+
+  (is-error (business-day-p :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "weekday-p"
+
+  (is (weekday-p (calendar-date 2015 1 1))
+      t)
+
+  (is (weekday-p (calendar-date 2015 1 3))
+      nil)
+
+  (is (weekday-p (calendar-date 2015 1 4))
+      nil)
+
+  (is-error (weekday-p :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "weekend-p"
+
+  (is (weekend-p (calendar-date 2015 1 1))
+      nil)
+
+  (is (weekend-p (calendar-date 2015 1 3))
+      t)
+
+  (is (weekend-p (calendar-date 2015 1 4))
+      t)
+
+  (is-error (weekend-p :foo)
             type-error
             "invalid calendar date."))
 
@@ -253,7 +340,18 @@
             "invalid calendar date."))
 
 (subtest "nth-of-the-month-in-business"
-  )
+
+  (is (nth-of-the-month 1 (calendar-date 2015 1 1))
+      (calendar-date 2015 1 1)
+      :test #'calendar-date=)
+
+  (is (nth-of-the-month-in-business 3 (calendar-date 2015 1 1))
+      (calendar-date 2015 1 2)
+      :test #'calendar-date=)
+
+  (is (nth-of-the-month-in-business 4 (calendar-date 2015 1 1))
+      (calendar-date 2015 1 2)
+      :test #'calendar-date=))
 
 (subtest "last-day-of-the-month"
 

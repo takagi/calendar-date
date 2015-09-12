@@ -8,6 +8,9 @@
            :calendar-date-day-of-week
            :calendar-date-values
            :calendar-date=
+           :business-day-p
+           :weekday-p
+           :weekend-p
            :next-day
            :previous-day
            :next-week
@@ -39,6 +42,25 @@
   (nth (1- month) '("Jan." "Feb." "Mar." "Apr." "May." "Jun."
                     "Jul." "Aug." "Sep." "Oct." "Nov." "Dec.")))
 
+(defun day-of-week (year month day)
+  "Compute day of week in Gregorian calendar by Zeller's congruence."
+  (check-type year (integer 0 9999))
+  (check-type month (integer 1 12))
+  (check-type day (integer 1 31))
+  (unless (<= day (last-day-of-year-month year month))
+    (error "~A ~S does not have day ~S." (month-name month) year day))
+  (flet ((div (x y) (floor (/ x y))))
+    (let ((year1 (if (< month 3)
+                     (1- year)
+                     year))
+          (month1 (if (< month 3)
+                      (+ month 12)
+                      month)))
+      (let* ((c (div year1 100))
+             (y (mod year1 100))
+             (g (+ (* 5 c) (div c 4))))
+        (1+ (mod (+ day (div (* (1+ month1) 26) 10) y (div y 4) g 5) 7))))))
+
 (defstruct (calendar-date (:constructor %make-calendar-date))
   (year :year :type integer :read-only t)
   (month :month :type integer :read-only t)
@@ -68,6 +90,16 @@
       (and (= year1 year2)
            (= month1 month2)
            (= day1 day2)))))
+
+(defun business-day-p (calendar-date)
+  (weekday-p calendar-date))
+
+(defun weekday-p (calendar-date)
+  (multiple-value-bind (year month day) (calendar-date-values calendar-date)
+    (<= 1 (day-of-week year month day) 5)))
+
+(defun weekend-p (calendar-date)
+  (not (weekday-p calendar-date)))
 
 (defmethod print-object ((object calendar-date) stream)
   (print-unreadable-object (object stream :type t)
