@@ -99,10 +99,10 @@
 (subtest "calendar-date"
   )
 
-(subtest "calendar-date-day-of-week"
+(subtest "calendar-date-values"
   )
 
-(subtest "calendar-date-values"
+(subtest "calendar-date-day-of-week"
   )
 
 (subtest "calendar-date="

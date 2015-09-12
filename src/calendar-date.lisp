@@ -5,8 +5,8 @@
            :calendar-date-year
            :calendar-date-month
            :calendar-date-day
-           :calendar-date-day-of-week
            :calendar-date-values
+           :calendar-date-day-of-week
            :calendar-date=
            :business-day-p
            :weekday-p
@@ -76,14 +76,14 @@
     (error "~A ~S does not have day ~S." (month-name month) year day))
   (%make-calendar-date :year year :month month :day day))
 
-(defun calendar-date-day-of-week (calendar-date)
-  (multiple-value-bind (year month day) (calendar-date-values calendar-date)
-    (day-of-week year month day)))
-
 (defun calendar-date-values (calendar-date)
   (values (calendar-date-year calendar-date)
           (calendar-date-month calendar-date)
           (calendar-date-day calendar-date)))
+
+(defun calendar-date-day-of-week (calendar-date)
+  (multiple-value-bind (year month day) (calendar-date-values calendar-date)
+    (day-of-week year month day)))
 
 (defun calendar-date= (calendar-date1 calendar-date2)
   (multiple-value-bind (year1 month1 day1)

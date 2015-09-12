@@ -29,13 +29,13 @@ Calendar-date is a Gregorian calendar date library in Common Lisp.
 
     CALENDAR-DATE-DAY calendar-date => day
 
-### [Function] calendar-date-day-of-week
-
-    CALENDAR-DATE-DAY-OF-WEEK calendar-date => day-of-week
-
 ### [Function] calendar-date-values
 
     CALENDAR-DATE-VALUES calendar-date => year, month, day
+
+### [Function] calendar-date-day-of-week
+
+    CALENDAR-DATE-DAY-OF-WEEK calendar-date => day-of-week
 
 ### [Function] calendar-date=
 
