@@ -97,13 +97,13 @@ Calendar-date is a Gregorian calendar date library in Common Lisp.
 
     SAME-DAY-OF-PREVIOUS-MONTH calendar-date => new-calendar-date
 
-### [Function] nth-of-the-month
-
-    NTH-OF-THE-MONTH nth calendar-date => new-calendar-date
-
 ### [Function] first-of-the-month
 
     FIRST-OF-THE-MONTH calendar-date => new-calendar-date
+
+### [Function] nth-of-the-month
+
+    NTH-OF-THE-MONTH nth calendar-date => new-calendar-date
 
 ### [Function] nth-of-the-month-in-business
 
