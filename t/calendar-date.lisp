@@ -337,6 +337,10 @@
       (calendar-date 2014 12 29)
       :test #'calendar-date=)
 
+  (is (day-of-week-of-the-week 7 (calendar-date 2015 1 1))
+      (calendar-date 2015 1 4)
+      :test #'calendar-date=)
+
   (is-error (day-of-week-of-the-week 0 (calendar-date 2015 1 1))
             type-error
             "invalid day of week.")
