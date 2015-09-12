@@ -11,6 +11,15 @@ Calendar-date is a Gregorian calendar date library in Common Lisp.
 
 ## Installation
 
+**Since calendar-date is not on Quicklisp yet, please use its local-projects feature for now.**
+
+    cd quicklisp/local-projects
+    git clone git@github.com:takagi/calendar-date
+
+You can install calendar-date via Quicklisp,
+
+    (ql:quickload :calendar-date)
+
 ## API
 
 ### [Function] calendar-date
