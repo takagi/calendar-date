@@ -1,5 +1,7 @@
 # Calendar-date
 
+**The project is planed to be on top of LOCAL-TIME as its extension later.**
+
 [![Circle CI](https://circleci.com/gh/takagi/calendar-date/tree/master.svg?style=shield)](https://circleci.com/gh/takagi/calendar-date/tree/master)
 [![Coverage Status](https://coveralls.io/repos/takagi/calendar-date/badge.svg?branch=master&service=github)](https://coveralls.io/github/takagi/calendar-date?branch=master)
 
