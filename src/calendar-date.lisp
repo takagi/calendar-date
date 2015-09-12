@@ -15,6 +15,9 @@
            :previous-day
            :next-week
            :previous-week
+           :same-day-of-week-of-next-week
+           :same-day-of-week-of-previous-week
+           :day-of-week-of-the-week
            :next-month
            :previous-month
            :same-day-of-next-month
@@ -134,14 +137,33 @@
     (calendar-date year month day)))
 
 (defun next-week (calendar-date)
+  (day-of-week-of-the-week 1
+   (same-day-of-week-of-next-week calendar-date)))
+
+(defun previous-week (calendar-date)
+  (day-of-week-of-the-week 1
+   (same-day-of-week-of-previous-week calendar-date)))
+
+(defun same-day-of-week-of-next-week (calendar-date)
   (loop repeat 7
      do (setf calendar-date (next-day calendar-date)))
   calendar-date)
 
-(defun previous-week (calendar-date)
+(defun same-day-of-week-of-previous-week (calendar-date)
   (loop repeat 7
      do (setf calendar-date (previous-day calendar-date)))
   calendar-date)
+
+(defun day-of-week-of-the-week (day-of-week calendar-date)
+  (check-type day-of-week (integer 1 7))
+  (let* ((day-of-week1 (calendar-date-day-of-week calendar-date))
+         (delta (- day-of-week1 day-of-week)))
+    (if (<= 0 delta)
+        (loop repeat delta
+           do (setf calendar-date (previous-day calendar-date)))
+        (loop repeat (- delta)
+           do (setf calendar-date (next-day calendar-date))))
+    calendar-date))
 
 (defun next-month (calendar-date)
   (next-day

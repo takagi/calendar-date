@@ -69,13 +69,13 @@ Calendar-date is a Gregorian calendar date library in Common Lisp.
 
     PREVIOUS-WEEK calendar-date => new-calendar-date
 
-### [Function] same-day-of-next-week
+### [Function] same-day-of-week-of-next-week
 
-    SAME-DAY-OF-NEXT-WEEK calendar-date => new-calendar-date
+    SAME-DAY-OF-WEEK-OF-NEXT-WEEK calendar-date => new-calendar-date
 
-### [Function] same-day-of-previous-week
+### [Function] same-day-of-week-of-previous-week
 
-    SAME-DAY-OF-PREVIOUS-WEEK calendar-date => new-calendar-date
+    SAME-DAY-OF-WEEK-OF-PREVIOUS-WEEK calendar-date => new-calendar-date
 
 ### [Function] day-of-week-of-the-week
 

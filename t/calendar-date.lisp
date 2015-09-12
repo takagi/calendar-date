@@ -97,13 +97,68 @@
             "invalid day."))
 
 (subtest "calendar-date"
-  )
+
+  (let ((calendar-date (calendar-date 2015 1 1)))
+    (is (calendar-date-year calendar-date)
+        2015)
+    (is (calendar-date-month calendar-date)
+        1)
+    (is (calendar-date-day calendar-date)
+        1))
+
+  (is-error (calendar-date :foo 1 1)
+            type-error
+            "invalid year.")
+
+  (is-error (calendar-date -1 1 1)
+            type-error
+            "invalid year.")
+
+  (is-error (calendar-date 10000 1 1)
+            type-error
+            "invalid year.")
+
+  (is-error (calendar-date 2015 :foo 1)
+            type-error
+            "invalid month.")
+
+  (is-error (calendar-date 2015 0 1)
+            type-error
+            "invalid month.")
+
+  (is-error (calendar-date 2015 13 1)
+            type-error
+            "invalid month.")
+
+  (is-error (calendar-date 2015 1 0)
+            type-error
+            "invalid day.")
+
+  (is-error (calendar-date 2015 1 32)
+            type-error
+            "invalid day.")
+
+  (is-error (calendar-date 2015 2 29)
+            simple-error
+            "invalid day."))
 
 (subtest "calendar-date-values"
-  )
+
+  (is-values (calendar-date-values (calendar-date 2015 1 1))
+             '(2015 1 1))
+
+  (is-error (calendar-date-values :foo)
+            type-error
+            "invalid calendar date."))
 
 (subtest "calendar-date-day-of-week"
-  )
+
+  (is (calendar-date-day-of-week (calendar-date 2015 1 1))
+      4)
+
+  (is-error (calendar-date-day-of-week :foo)
+            type-error
+            "invalid calendar date."))
 
 (subtest "calendar-date="
 
@@ -237,19 +292,62 @@
             "invalid calendar date."))
 
 (subtest "next-week"
-  )
+
+  (is (next-week (calendar-date 2015 1 1))
+      (calendar-date 2015 1 5)
+      :test #'calendar-date=)
+
+  (is-error (next-week :foo)
+            type-error
+            "invalid calendar date."))
 
 (subtest "previous-week"
-  )
 
-(subtest "same-day-of-next-week"
-  )
+  (is (previous-week (calendar-date 2015 1 1))
+      (calendar-date 2014 12 22)
+      :test #'calendar-date=)
 
-(subtest "same-day-of-previous-week"
-  )
+  (is-error (previous-week :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "same-day-of-week-of-next-week"
+
+  (is (same-day-of-week-of-next-week (calendar-date 2015 1 1))
+      (calendar-date 2015 1 8)
+      :test #'calendar-date=)
+
+  (is-error (same-day-of-week-of-next-week :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "same-day-of-week-of-previous-week"
+
+  (is (same-day-of-week-of-previous-week (calendar-date 2015 1 1))
+      (calendar-date 2014 12 25)
+      :test #'calendar-date=)
+
+  (is-error (same-day-of-week-of-previous-week :foo)
+            type-error
+            "invalid calendar date."))
 
 (subtest "day-of-week-of-the-week"
-  )
+
+  (is (day-of-week-of-the-week 1 (calendar-date 2015 1 1))
+      (calendar-date 2014 12 29)
+      :test #'calendar-date=)
+
+  (is-error (day-of-week-of-the-week 0 (calendar-date 2015 1 1))
+            type-error
+            "invalid day of week.")
+
+  (is-error (day-of-week-of-the-week 8 (calendar-date 2015 1 1))
+            type-error
+            "invalid day of week.")
+
+  (is-error (day-of-week-of-the-week 1 :foo)
+            type-error
+            "invalid calendar date."))
 
 (subtest "next-month"
 
