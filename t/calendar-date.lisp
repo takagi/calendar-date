@@ -242,18 +242,23 @@
 (subtest "previous-week"
   )
 
+(subtest "same-day-of-next-week"
+  )
+
+(subtest "same-day-of-previous-week"
+  )
+
+(subtest "day-of-week-of-the-week"
+  )
+
 (subtest "next-month"
 
   (is (next-month (calendar-date 2015 1 1))
       (calendar-date 2015 2 1)
       :test #'calendar-date=)
 
-  (is (next-month (calendar-date 2015 1 31))
-      (calendar-date 2015 2 28)
-      :test #'calendar-date=)
-
-  (is (next-month (calendar-date 2016 1 31))
-      (calendar-date 2016 2 29)
+  (is (next-month (calendar-date 2015 1 2))
+      (calendar-date 2015 2 1)
       :test #'calendar-date=)
 
   (is-error (next-month :foo)
@@ -266,40 +271,67 @@
       (calendar-date 2015 1 1)
       :test #'calendar-date=)
 
-  (is (previous-month (calendar-date 2015 3 31))
-      (calendar-date 2015 2 28)
-      :test #'calendar-date=)
-
-  (is (previous-month (calendar-date 2016 3 31))
-      (calendar-date 2016 2 29)
+  (is (previous-month (calendar-date 2015 2 2))
+      (calendar-date 2015 1 1)
       :test #'calendar-date=)
 
   (is-error (previous-month :foo)
             type-error
             "invalid calendar date."))
 
+(subtest "same-day-of-next-month"
+
+  (is (same-day-of-next-month (calendar-date 2015 1 1))
+      (calendar-date 2015 2 1)
+      :test #'calendar-date=)
+
+  (is (same-day-of-next-month (calendar-date 2015 1 2))
+      (calendar-date 2015 2 2)
+      :test #'calendar-date=)
+
+  (is (same-day-of-next-month (calendar-date 2015 1 31))
+      (calendar-date 2015 2 28)
+      :test #'calendar-date=)
+
+  (is (same-day-of-next-month (calendar-date 2016 1 31))
+      (calendar-date 2016 2 29)
+      :test #'calendar-date=)
+
+  (is-error (same-day-of-next-month :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "same-day-of-previous-month"
+
+  (is (same-day-of-previous-month (calendar-date 2015 2 1))
+      (calendar-date 2015 1 1)
+      :test #'calendar-date=)
+
+  (is (same-day-of-previous-month (calendar-date 2015 2 2))
+      (calendar-date 2015 1 2)
+      :test #'calendar-date=)
+
+  (is (same-day-of-previous-month (calendar-date 2015 3 31))
+      (calendar-date 2015 2 28)
+      :test #'calendar-date=)
+
+  (is (same-day-of-previous-month (calendar-date 2016 3 31))
+      (calendar-date 2016 2 29)
+      :test #'calendar-date=)
+
+  (is-error (same-day-of-previous-month :foo)
+            type-error
+            "invalid calendar date."))
+
 (subtest "first-of-the-month"
 
-  (is (first-of-the-month (calendar-date 2015 1 1))
+  (is (first-of-the-month (calendar-date 2015 1 2))
       (calendar-date 2015 1 1)
       :test #'calendar-date=)
 
   (is-error (first-of-the-month :foo)
             type-error
             "invalid calendar date."))
-
-(subtest "first-of-next-month"
-
-  (is (first-of-next-month (calendar-date 2015 1 1))
-      (calendar-date 2015 2 1)
-      :test #'calendar-date=)
-
-  (is-error (first-of-next-month :foo)
-            type-error
-            "invalid calendar date."))
-
-(subtest "first-of-previous-month"
-  )
 
 (subtest "nth-of-the-month"
 
@@ -353,6 +385,36 @@
       (calendar-date 2015 1 2)
       :test #'calendar-date=))
 
+(subtest "nth-business-day-of-the-month"
+
+  (is (nth-business-day-of-the-month 1 (calendar-date 2015 1 1))
+      (calendar-date 2015 1 1)
+      :test #'calendar-date=)
+
+  (is (nth-business-day-of-the-month 3 (calendar-date 2015 1 1))
+      (calendar-date 2015 1 5)
+      :test #'calendar-date=)
+
+  (is (nth-business-day-of-the-month 22 (calendar-date 2015 1 1))
+      (calendar-date 2015 1 30)
+      :test #'calendar-date=)
+
+  (is-error (nth-business-day-of-the-month :foo (calendar-date 2015 1 1))
+            type-error
+            "invalid day.")
+
+  (is-error (nth-business-day-of-the-month 0 (calendar-date 2015 1 1))
+            type-error
+            "invalid day.")
+
+  (is-error (nth-business-day-of-the-month 23 (calendar-date 2015 1 1))
+            simple-error
+            "invalid day.")
+
+  (is-error (nth-business-day-of-the-month 1 :foo)
+            type-error
+            "invalid calendar date."))
+
 (subtest "last-day-of-the-month"
 
   (is (last-day-of-the-month (calendar-date 2015 1 1))
@@ -368,6 +430,16 @@
       :test #'calendar-date=)
 
   (is-error (last-day-of-the-month :foo)
+            type-error
+            "invalid calendar date."))
+
+(subtest "last-business-day-of-the-month"
+
+  (is (last-business-day-of-the-month (calendar-date 2015 1 1))
+      (calendar-date 2015 1 30)
+      :test #'calendar-date=)
+
+  (is-error (last-business-day-of-the-month :foo)
             type-error
             "invalid calendar date."))
 

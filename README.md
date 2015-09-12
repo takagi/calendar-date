@@ -69,13 +69,17 @@ Calendar-date is a Gregorian calendar date library in Common Lisp.
 
     PREVIOUS-WEEK calendar-date => new-calendar-date
 
-### [Function] beginning-of-next-week
+### [Function] same-day-of-next-week
 
-    BEGINNING-OF-NEXT-WEEK calendar-date => new-calendar-date
+    SAME-DAY-OF-NEXT-WEEK calendar-date => new-calendar-date
 
-### [Function] day-of-the-week
+### [Function] same-day-of-previous-week
 
-    DAY-OF-THE-WEEK day-of-week calendar-date => new-calendar-date
+    SAME-DAY-OF-PREVIOUS-WEEK calendar-date => new-calendar-date
+
+### [Function] day-of-week-of-the-week
+
+    DAY-OF-WEEK-OF-THE-WEEK day-of-week calendar-date => new-calendar-date
 
 ### [Function] next-month
 
@@ -85,21 +89,21 @@ Calendar-date is a Gregorian calendar date library in Common Lisp.
 
     PREVIOUS-MONTH calendar-date => new-calendar-date
 
-### [Function] first-of-the-month
+### [Function] same-day-of-next-month
 
-    FIRST-OF-THE-MONTH calendar-date => new-calendar-date
+    SAME-DAY-OF-NEXT-MONTH calendar-date => new-calendar-date
 
-### [Function] first-of-next-month
+### [Function] same-day-of-previous-month
 
-    FIRST-OF-NEXT-MONTH calendar-date => new-calendar-date
-
-### [Function] first-of-previous-month
-
-    FIRST-OF-PREVIOUS-MONTH calendar-date => new-calendar-date
+    SAME-DAY-OF-PREVIOUS-MONTH calendar-date => new-calendar-date
 
 ### [Function] nth-of-the-month
 
     NTH-OF-THE-MONTH nth calendar-date => new-calendar-date
+
+### [Function] first-of-the-month
+
+    FIRST-OF-THE-MONTH calendar-date => new-calendar-date
 
 ### [Function] nth-of-the-month-in-business
 
