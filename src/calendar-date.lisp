@@ -150,11 +150,6 @@
 (defun weekend-p (calendar-date)
   (not (weekday-p calendar-date)))
 
-(defmethod print-object ((object calendar-date) stream)
-  (print-unreadable-object (object stream :type t)
-    (multiple-value-bind (year month day) (calendar-date-values object)
-      (format stream "~4,'0d-~2,'0d-~2,'0d" year month day))))
-
 (defun next-day (calendar-date)
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (incf day)

@@ -324,14 +324,6 @@
             type-error
             "invalid calendar date."))
 
-(subtest "print-object"
-
-  (is-print (princ (calendar-date 2015 1 1))
-            "#<CALENDAR-DATE 2015-01-01>")
-
-  (is-print (prin1 (calendar-date 2015 1 1))
-            "#<CALENDAR-DATE 2015-01-01>"))
-
 (subtest "next-day"
 
   (is (next-day (calendar-date 2015 1 1))
