@@ -2,7 +2,14 @@
 (defpackage calendar-date-test
   (:use :cl
         :calendar-date
-        :prove))
+        :prove)
+  (:import-from :local-time
+                :today
+                :timestamp-year
+                :timestamp-month
+                :timestamp-day
+                :*default-timezone*
+                :+utc-zone+))
 (in-package :calendar-date-test)
 
 
@@ -141,6 +148,22 @@
   (is-error (calendar-date 2015 2 29)
             simple-error
             "invalid day."))
+
+(subtest "calendar-date-today"
+
+  (let ((*default-timezone* +utc-zone+))
+    (let ((today (today))               ; TODAY always in UTC.
+          (calendar-date-today (calendar-date-today)))
+      (is (calendar-date-year calendar-date-today)
+          (timestamp-year today))
+      (is (calendar-date-month calendar-date-today)
+          (timestamp-month today))
+      (is (calendar-date-day calendar-date-today)
+          (timestamp-day today))))
+
+  (is-error (calendar-date-today :timezone :foo)
+            type-error
+            "invalid timezone."))
 
 (subtest "calendar-date-values"
 

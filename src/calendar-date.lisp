@@ -2,6 +2,7 @@
 (defpackage calendar-date
   (:use :cl)
   (:export :calendar-date
+           :calendar-date-today
            :calendar-date-year
            :calendar-date-month
            :calendar-date-day
@@ -27,7 +28,13 @@
            :nth-of-the-month-in-business
            :nth-business-day-of-the-month
            :last-day-of-the-month
-           :last-business-day-of-the-month))
+           :last-business-day-of-the-month)
+  (:import-from :local-time
+                :now
+                :timestamp-year
+                :timestamp-month
+                :timestamp-day
+                :*default-timezone*))
 (in-package :calendar-date)
 
 
@@ -78,6 +85,12 @@
   (unless (<= day (last-day-of-year-month year month))
     (error "~A ~S does not have day ~S." (month-name month) year day))
   (%make-calendar-date :year year :month month :day day))
+
+(defun calendar-date-today (&key (timezone *default-timezone*))
+  (let ((now (now)))
+    (calendar-date (timestamp-year now :timezone timezone)
+                   (timestamp-month now :timezone timezone)
+                   (timestamp-day now :timezone timezone))))
 
 (defun calendar-date-values (calendar-date)
   (values (calendar-date-year calendar-date)

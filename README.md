@@ -26,6 +26,10 @@ You can install calendar-date via Quicklisp,
 
     CALENDAR-DATE year month day => new-calendar-date
 
+### [Function] calendar-date-today
+
+    CALENDAR-DATE-TODAY &key timezone => new-calendar-date
+
 ### [Function] calendar-date-year
 
     CALENDAR-DATE-YEAR calendar-date => year

@@ -12,7 +12,7 @@
   :version "0.1"
   :author "Masayuki Takagi"
   :license "MIT"
-  :depends-on ()
+  :depends-on (:local-time)
   :components ((:module "src"
                 :components
                 ((:file "calendar-date"))))
