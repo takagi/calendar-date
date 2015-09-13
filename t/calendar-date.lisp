@@ -209,6 +209,76 @@
             type-error
             "invalid calendar date."))
 
+(subtest "calendar-date/="
+
+  (is (calendar-date/= (calendar-date 2015 1 1)
+                       (calendar-date 2015 1 1))
+      nil)
+
+  (is (calendar-date/= (calendar-date 2015 1 1)
+                       (calendar-date 2015 1 2))
+      t))
+
+(subtest "calendar-date<"
+
+  (is (calendar-date< (calendar-date 2015 1 1)
+                      (calendar-date 2015 1 2))
+      t)
+
+  (is (calendar-date< (calendar-date 2015 1 1)
+                      (calendar-date 2015 2 1))
+      t)
+
+  (is (calendar-date< (calendar-date 2015 1 1)
+                      (calendar-date 2016 1 1))
+      t)
+
+  (is (calendar-date< (calendar-date 2014 12 31)
+                      (calendar-date 2015 1 1))
+      t)
+
+  (is (calendar-date< (calendar-date 2015 1 1)
+                      (calendar-date 2015 1 1))
+      nil)
+
+  (is (calendar-date< (calendar-date 2015 1 2)
+                      (calendar-date 2015 1 1))
+      nil)
+
+  (is (calendar-date< (calendar-date 2015 2 1)
+                      (calendar-date 2015 1 1))
+      nil)
+
+  (is (calendar-date< (calendar-date 2016 1 1)
+                      (calendar-date 2015 1 1))
+      nil))
+
+(subtest "calendar-date>"
+
+  (is (calendar-date> (calendar-date 2015 1 2)
+                      (calendar-date 2015 1 1))
+      t))
+
+(subtest "calendar-date<="
+
+  (is (calendar-date<= (calendar-date 2015 1 1)
+                       (calendar-date 2015 1 1))
+      t)
+
+  (is (calendar-date<= (calendar-date 2015 1 1)
+                       (calendar-date 2015 1 2))
+      t))
+
+(subtest "calendar-date>="
+
+  (is (calendar-date>= (calendar-date 2015 1 1)
+                       (calendar-date 2015 1 1))
+      t)
+
+  (is (calendar-date>= (calendar-date 2015 1 2)
+                       (calendar-date 2015 1 1))
+      t))
+
 (subtest "business-day-p"
 
   (is (business-day-p (calendar-date 2015 1 1))

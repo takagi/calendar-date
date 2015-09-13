@@ -50,9 +50,14 @@ You can install calendar-date via Quicklisp,
 
     CALENDAR-DATE-DAY-OF-WEEK calendar-date => day-of-week
 
-### [Function] calendar-date=
+### [Function] calendar-date=, calendar-date/=, calendar-date<, calendar-date>, calendar-date<=, calendar-date>=
 
     CALENDAR-DATE= calendar-date1 calendar-date2 => generalized-boolean
+    CALENDAR-DATE/= calendar-date1 calendar-date2 => generalized-boolean
+    CALENDAR-DATE< calendar-date1 calendar-date2 => generalized-boolean
+    CALENDAR-DATE> calendar-date1 calendar-date2 => generalized-boolean
+    CALENDAR-DATE<= calendar-date1 calendar-date2 => generalized-boolean
+    CALENDAR-DATE>= calendar-date1 calendar-date2 => generalized-boolean
 
 ### [Function] business-day-p
 

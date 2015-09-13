@@ -9,6 +9,11 @@
            :calendar-date-values
            :calendar-date-day-of-week
            :calendar-date=
+           :calendar-date/=
+           :calendar-date<
+           :calendar-date>
+           :calendar-date<=
+           :calendar-date>=
            :business-day-p
            :weekday-p
            :weekend-p
@@ -109,6 +114,31 @@
       (and (= year1 year2)
            (= month1 month2)
            (= day1 day2)))))
+
+(defun calendar-date/= (calendar-date1 calendar-date2)
+  (not (calendar-date= calendar-date1 calendar-date2)))
+
+(defun calendar-date< (calendar-date1 calendar-date2)
+  (multiple-value-bind (year1 month1 day1)
+      (calendar-date-values calendar-date1)
+    (multiple-value-bind (year2 month2 day2)
+        (calendar-date-values calendar-date2)
+      (or (< year1 year2)
+          (and (= year1 year2)
+               (< month1 month2))
+          (and (= year1 year2)
+               (= month1 month2)
+               (< day1 day2))))))
+
+(defun calendar-date> (calendar-date1 calendar-date2)
+  (and (not (calendar-date< calendar-date1 calendar-date2))
+       (not (calendar-date= calendar-date1 calendar-date2))))
+
+(defun calendar-date<= (calendar-date1 calendar-date2)
+  (not (calendar-date> calendar-date1 calendar-date2)))
+
+(defun calendar-date>= (calendar-date1 calendar-date2)
+  (not (calendar-date< calendar-date1 calendar-date2)))
 
 (defun business-day-p (calendar-date)
   (weekday-p calendar-date))
