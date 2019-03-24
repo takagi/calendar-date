@@ -260,21 +260,16 @@
 
 (defun nth-weekday-of-the-month (nth calendar-date)
   (check-type nth (integer 1))
-  (let ((month (calendar-date-month calendar-date)))
-    (let ((calendar-date1 (first-of-the-month calendar-date)))
-      (loop
-         do ;; Decrement counter if business day.
-            (when (business-day-p calendar-date1)
-              (decf nth))
-            ;; Return the calendar date if counter reachs zero.
-            (when (= nth 0)
-              (return calendar-date1))
-            ;; Proceeds the calendar date.
-            (setf calendar-date1 (next-day calendar-date1))
-            ;; Error if steps into the next month.
-            (let ((month1 (calendar-date-month calendar-date1)))
-              (unless (= month month1)
-                (error "The value ~S is invalid." nth)))))))
+  (let ((calendar-date1 (first-of-the-month calendar-date)))
+    ;; Proceeds the calendar date.
+    (loop repeat (1- nth)
+       do (setf calendar-date1 (next-weekday calendar-date1)))
+    ;; Error if steps into the next month.
+    (let ((month (calendar-date-month calendar-date))
+          (month1 (calendar-date-month calendar-date1)))
+      (unless (= month month1)
+        (error "The value ~S is invalid." nth)))
+    calendar-date1))
 
 (defun last-day-of-the-month (calendar-date)
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
@@ -291,6 +286,7 @@
 (defun nth-last-day-of-the-month (nth calendar-date)
   (check-type nth (integer 1 31))
   (let ((calendar-date1 (last-day-of-the-month calendar-date)))
+    ;; Regresses the calendar date.
     (loop repeat (1- nth)
        do (setf calendar-date1 (previous-day calendar-date1)))
     ;; Error if steps into the previous month.
@@ -303,6 +299,7 @@
 (defun nth-last-weekday-of-the-month (nth calendar-date)
   (check-type nth (integer 1))
   (let ((calendar-date1 (last-weekday-of-the-month calendar-date)))
+    ;; Regresses the calendar date.
     (loop repeat (1- nth)
        do (setf calendar-date1 (previous-weekday calendar-date1)))
     ;; Error if steps into the previous month.
