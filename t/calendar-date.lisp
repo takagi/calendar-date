@@ -350,6 +350,20 @@
             type-error
             "invalid calendar date."))
 
+(subtest "next-weekday"
+
+  (is (next-weekday (calendar-date 2019 3 22))
+      (calendar-date 2019 3 25)
+      :test #'calendar-date=)
+
+  (is (next-weekday (calendar-date 2019 3 25))
+      (calendar-date 2019 3 26)
+      :test #'calendar-date=)
+
+  (is-error (next-weekday :foo)
+            type-error
+            "invalid calendar date."))
+
 (subtest "previous-day"
 
   (is (previous-day (calendar-date 2015 1 2))
