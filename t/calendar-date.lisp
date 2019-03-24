@@ -644,5 +644,39 @@
             type-error
             "invalid calendar date."))
 
+(subtest "nth-last-day-of-the-month"
+
+  (is (nth-last-day-of-the-month 1 (calendar-date 2019 3 1))
+      (calendar-date 2019 3 31)
+      :test #'calendar-date=)
+
+  (is (nth-last-day-of-the-month 2 (calendar-date 2019 3 1))
+      (calendar-date 2019 3 30)
+      :test #'calendar-date=)
+
+  (is (nth-last-day-of-the-month 31 (calendar-date 2019 3 1))
+      (calendar-date 2019 3 1)
+      :test #'calendar-date=)
+
+  (is-error (nth-last-day-of-the-month :foo (calendar-date 2019 3 1))
+            type-error
+            "invalid value.")
+
+  (is-error (nth-last-day-of-the-month 0 (calendar-date 2019 3 1))
+            type-error
+            "invalid value.")
+
+  (is-error (nth-last-day-of-the-month 32 (calendar-date 2019 3 1))
+            type-error
+            "invalid value.")
+
+  (is-error (nth-last-day-of-the-month 29 (calendar-date 2019 2 1))
+            simple-error
+            "invalid value.")
+
+  (is-error (nth-last-day-of-the-month 1 :foo)
+            type-error
+            "invalid calendar date."))
+
 
 (finalize)

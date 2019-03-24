@@ -34,7 +34,8 @@
            :nth-of-the-month
            :nth-weekday-of-the-month
            :last-day-of-the-month
-           :last-weekday-of-the-month)
+           :last-weekday-of-the-month
+           :nth-last-day-of-the-month)
   (:import-from :local-time
                 :now
                 :timestamp-year
@@ -284,4 +285,16 @@
   (let ((calendar-date1 (last-day-of-the-month calendar-date)))
     (loop until (business-day-p calendar-date1)
        do (setf calendar-date1 (previous-day calendar-date1)))
+    calendar-date1))
+
+(defun nth-last-day-of-the-month (nth calendar-date)
+  (check-type nth (integer 1 31))
+  (let ((calendar-date1 (last-day-of-the-month calendar-date)))
+    (loop repeat (1- nth)
+       do (setf calendar-date1 (previous-day calendar-date1)))
+    ;; Error if steps into the next month.
+    (let ((month (calendar-date-month calendar-date))
+          (month1 (calendar-date-month calendar-date1)))
+      (unless (= month month1)
+        (error "The value ~S is invalid." nth)))
     calendar-date1))
