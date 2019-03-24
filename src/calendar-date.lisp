@@ -34,7 +34,7 @@
            :nth-of-the-month
            :nth-weekday-of-the-month
            :last-day-of-the-month
-           :last-business-day-of-the-month)
+           :last-weekday-of-the-month)
   (:import-from :local-time
                 :now
                 :timestamp-year
@@ -280,7 +280,7 @@
     (let ((day1 (last-day-of-year-month year month)))
       (calendar-date year month day1))))
 
-(defun last-business-day-of-the-month (calendar-date)
+(defun last-weekday-of-the-month (calendar-date)
   (let ((calendar-date1 (last-day-of-the-month calendar-date)))
     (loop until (business-day-p calendar-date1)
        do (setf calendar-date1 (previous-day calendar-date1)))

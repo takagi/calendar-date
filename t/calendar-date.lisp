@@ -634,13 +634,13 @@
             type-error
             "invalid calendar date."))
 
-(subtest "last-business-day-of-the-month"
+(subtest "last-weekday-of-the-month"
 
-  (is (last-business-day-of-the-month (calendar-date 2015 1 1))
+  (is (last-weekday-of-the-month (calendar-date 2015 1 1))
       (calendar-date 2015 1 30)
       :test #'calendar-date=)
 
-  (is-error (last-business-day-of-the-month :foo)
+  (is-error (last-weekday-of-the-month :foo)
             type-error
             "invalid calendar date."))
 
