@@ -32,7 +32,7 @@
            :same-day-of-previous-month
            :first-of-the-month
            :nth-of-the-month
-           :nth-business-day-of-the-month
+           :nth-weekday-of-the-month
            :last-day-of-the-month
            :last-business-day-of-the-month)
   (:import-from :local-time
@@ -256,7 +256,7 @@
     (declare (ignore day))
     (calendar-date year month nth)))
 
-(defun nth-business-day-of-the-month (nth calendar-date)
+(defun nth-weekday-of-the-month (nth calendar-date)
   (check-type nth (integer 1))
   (let ((month (calendar-date-month calendar-date)))
     (let ((calendar-date1 (first-of-the-month calendar-date)))

@@ -586,33 +586,33 @@
             type-error
             "invalid calendar date."))
 
-(subtest "nth-business-day-of-the-month"
+(subtest "nth-weekday-of-the-month"
 
-  (is (nth-business-day-of-the-month 1 (calendar-date 2015 1 1))
+  (is (nth-weekday-of-the-month 1 (calendar-date 2015 1 1))
       (calendar-date 2015 1 1)
       :test #'calendar-date=)
 
-  (is (nth-business-day-of-the-month 3 (calendar-date 2015 1 1))
+  (is (nth-weekday-of-the-month 3 (calendar-date 2015 1 1))
       (calendar-date 2015 1 5)
       :test #'calendar-date=)
 
-  (is (nth-business-day-of-the-month 22 (calendar-date 2015 1 1))
+  (is (nth-weekday-of-the-month 22 (calendar-date 2015 1 1))
       (calendar-date 2015 1 30)
       :test #'calendar-date=)
 
-  (is-error (nth-business-day-of-the-month :foo (calendar-date 2015 1 1))
+  (is-error (nth-weekday-of-the-month :foo (calendar-date 2015 1 1))
             type-error
             "invalid day.")
 
-  (is-error (nth-business-day-of-the-month 0 (calendar-date 2015 1 1))
+  (is-error (nth-weekday-of-the-month 0 (calendar-date 2015 1 1))
             type-error
             "invalid day.")
 
-  (is-error (nth-business-day-of-the-month 23 (calendar-date 2015 1 1))
+  (is-error (nth-weekday-of-the-month 23 (calendar-date 2015 1 1))
             simple-error
             "invalid day.")
 
-  (is-error (nth-business-day-of-the-month 1 :foo)
+  (is-error (nth-weekday-of-the-month 1 :foo)
             type-error
             "invalid calendar date."))
 
