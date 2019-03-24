@@ -279,21 +279,6 @@
                        (calendar-date 2015 1 1))
       t))
 
-(subtest "business-day-p"
-
-  (is (business-day-p (calendar-date 2015 1 1))
-      t)
-
-  (is (business-day-p (calendar-date 2015 1 3))
-      nil)
-
-  (is (business-day-p (calendar-date 2015 1 4))
-      nil)
-
-  (is-error (business-day-p :foo)
-            type-error
-            "invalid calendar date."))
-
 (subtest "weekday-p"
 
   (is (weekday-p (calendar-date 2015 1 1))

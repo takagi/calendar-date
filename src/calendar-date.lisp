@@ -14,7 +14,6 @@
            :calendar-date>
            :calendar-date<=
            :calendar-date>=
-           :business-day-p
            :weekday-p
            :weekend-p
            :next-day
@@ -142,9 +141,6 @@
 
 (defun calendar-date>= (calendar-date1 calendar-date2)
   (not (calendar-date< calendar-date1 calendar-date2)))
-
-(defun business-day-p (calendar-date)
-  (weekday-p calendar-date))
 
 (defun weekday-p (calendar-date)
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
@@ -279,7 +275,7 @@
 
 (defun last-weekday-of-the-month (calendar-date)
   (let ((calendar-date1 (last-day-of-the-month calendar-date)))
-    (loop until (business-day-p calendar-date1)
+    (loop until (weekday-p calendar-date1)
        do (setf calendar-date1 (previous-day calendar-date1)))
     calendar-date1))
 
