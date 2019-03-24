@@ -32,7 +32,6 @@
            :same-day-of-previous-month
            :first-of-the-month
            :nth-of-the-month
-           :nth-of-the-month-in-business
            :nth-business-day-of-the-month
            :last-day-of-the-month
            :last-business-day-of-the-month)
@@ -256,13 +255,6 @@
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (declare (ignore day))
     (calendar-date year month nth)))
-
-(defun nth-of-the-month-in-business (nth calendar-date)
-  (let ((calendar-date1 (nth-of-the-month nth calendar-date)))
-    (loop
-       until (business-day-p calendar-date1)
-       do (setf calendar-date1 (previous-day calendar-date1)))
-    calendar-date1))
 
 (defun nth-business-day-of-the-month (nth calendar-date)
   (check-type nth (integer 1))

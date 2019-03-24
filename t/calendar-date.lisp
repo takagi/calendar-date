@@ -586,20 +586,6 @@
             type-error
             "invalid calendar date."))
 
-(subtest "nth-of-the-month-in-business"
-
-  (is (nth-of-the-month 1 (calendar-date 2015 1 1))
-      (calendar-date 2015 1 1)
-      :test #'calendar-date=)
-
-  (is (nth-of-the-month-in-business 3 (calendar-date 2015 1 1))
-      (calendar-date 2015 1 2)
-      :test #'calendar-date=)
-
-  (is (nth-of-the-month-in-business 4 (calendar-date 2015 1 1))
-      (calendar-date 2015 1 2)
-      :test #'calendar-date=))
-
 (subtest "nth-business-day-of-the-month"
 
   (is (nth-business-day-of-the-month 1 (calendar-date 2015 1 1))
