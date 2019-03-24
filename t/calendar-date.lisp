@@ -678,5 +678,31 @@
             type-error
             "invalid calendar date."))
 
+(subtest "nth-last-weekday-of-the-month"
+
+  (is (nth-last-weekday-of-the-month 1 (calendar-date 2019 3 1))
+      (calendar-date 2019 3 29)
+      :test #'calendar-date=)
+
+  (is (nth-last-weekday-of-the-month 21 (calendar-date 2019 3 1))
+      (calendar-date 2019 3 1)
+      :test #'calendar-date=)
+
+  (is-error (nth-last-weekday-of-the-month :foo (calendar-date 2019 3 1))
+            type-error
+            "invalid value.")
+
+  (is-error (nth-last-weekday-of-the-month 0 (calendar-date 2019 3 1))
+            type-error
+            "invalid value.")
+
+  (is-error (nth-last-weekday-of-the-month 22 (calendar-date 2019 3 1))
+            simple-error
+            "invalid value.")
+
+  (is-error (nth-last-weekday-of-the-month 1 :foo)
+            type-error
+            "invalid calendar date."))
+
 
 (finalize)
