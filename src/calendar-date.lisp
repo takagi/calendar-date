@@ -18,8 +18,9 @@
            :weekday-p
            :weekend-p
            :next-day
-           :next-weekday
            :previous-day
+           :next-weekday
+           :previous-weekday
            :next-week
            :previous-week
            :same-day-of-week-of-next-week
@@ -162,12 +163,6 @@
       (incf year))
     (calendar-date year month day)))
 
-(defun next-weekday (calendar-date)
-  (loop
-     do (setf calendar-date (next-day calendar-date))
-     until (weekday-p calendar-date))
-  calendar-date)
-
 (defun previous-day (calendar-date)
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (decf day)
@@ -180,6 +175,18 @@
             (setf day 31))
           (setf day (last-day-of-year-month year month))))
     (calendar-date year month day)))
+
+(defun next-weekday (calendar-date)
+  (loop
+     do (setf calendar-date (next-day calendar-date))
+     until (weekday-p calendar-date))
+  calendar-date)
+
+(defun previous-weekday (calendar-date)
+  (loop
+     do (setf calendar-date (previous-day calendar-date))
+     until (weekday-p calendar-date))
+  calendar-date)
 
 (defun next-week (calendar-date)
   (day-of-week-of-the-week 1
