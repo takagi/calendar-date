@@ -26,6 +26,7 @@
            :same-day-of-week-of-next-week
            :same-day-of-week-of-previous-week
            :next-day-of-week
+           :previous-day-of-week
            :day-of-week-of-the-week
            :next-month
            :previous-month
@@ -212,6 +213,12 @@
   (check-type day-of-week (integer 1 7))
   (loop do (setf calendar-date (next-day calendar-date))
 	until (= day-of-week (calendar-date-day-of-week calendar-date)))
+  calendar-date)
+
+(defun previous-day-of-week (day-of-week calendar-date)
+  (check-type day-of-week (integer 1 7))
+  (loop do (setf calendar-date (previous-day calendar-date))
+        until (= day-of-week (calendar-date-day-of-week calendar-date)))
   calendar-date)
 
 (defun day-of-week-of-the-week (day-of-week calendar-date)

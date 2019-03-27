@@ -466,6 +466,28 @@
 	    type-error
 	    "invalid calendar date."))
 
+(subtest "previous-day-of-week"
+
+  (is (previous-day-of-week 1 (calendar-date 2019 3 28))
+      (calendar-date 2019 3 25)
+      :test #'calendar-date=)
+
+  (is (previous-day-of-week 4 (calendar-date 2019 3 28))
+      (calendar-date 2019 3 21)
+      :test #'calendar-date=)
+
+  (is-error (previous-day-of-week 0 (calendar-date 2019 3 28))
+	    type-error
+	    "invalid day of week.")
+
+  (is-error (previous-day-of-week 8 (calendar-date 2019 3 28))
+	    type-error
+	    "invalid day of week.")
+
+  (is-error (previous-day-of-week 1 :foo)
+	    type-error
+	    "invalid calendar date."))
+
 (subtest "day-of-week-of-the-week"
 
   (is (day-of-week-of-the-week 1 (calendar-date 2015 1 1))
