@@ -28,6 +28,7 @@
            :next-day-of-week
            :previous-day-of-week
            :day-of-week-of-the-week
+           :nth-day-of-week-of-the-month
            :next-month
            :previous-month
            :same-day-of-next-month
@@ -231,6 +232,16 @@
         (loop repeat (- delta)
            do (setf calendar-date (next-day calendar-date))))
     calendar-date))
+
+(defun nth-day-of-week-of-the-month (nth day-of-week calendar-date)
+  (check-type nth (integer 1 4))
+  (check-type day-of-week (integer 1 7))
+  (let ((calendar-date1 (next-day-of-week day-of-week
+			 (previous-day
+			  (first-of-the-month calendar-date)))))
+    (loop repeat (1- nth)
+       do (setf calendar-date1 (same-day-of-week-of-next-week calendar-date1)))
+    calendar-date1))
 
 (defun next-month (calendar-date)
   (next-day
