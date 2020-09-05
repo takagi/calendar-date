@@ -509,12 +509,16 @@
       (calendar-date 2019 3 25)
       :test #'calendar-date=)
 
+  (is (nth-day-of-week-of-the-month 5 5 (calendar-date 2019 3 1))
+      (calendar-date 2019 3 29)
+      :test #'calendar-date=)
+
   (is-error (nth-day-of-week-of-the-month 0 1 (calendar-date 2019 3 1))
 	    type-error
 	    "invalid value.")
 
   (is-error (nth-day-of-week-of-the-month 5 1 (calendar-date 2019 3 1))
-	    type-error
+	    simple-error
 	    "invalid value.")
 
   (is-error (nth-day-of-week-of-the-month 1 0 (calendar-date 2019 3 1))

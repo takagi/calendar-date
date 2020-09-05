@@ -230,13 +230,16 @@
     calendar-date))
 
 (defun nth-day-of-week-of-the-month (nth day-of-week calendar-date)
-  (check-type nth (integer 1 4))
+  (check-type nth (integer 1 5))
   (check-type day-of-week (integer 1 7))
   (let ((calendar-date1 (next-day-of-week day-of-week
-			 (previous-day
-			  (first-of-the-month calendar-date)))))
+                         (previous-day
+                          (first-of-the-month calendar-date)))))
     (loop repeat (1- nth)
        do (setf calendar-date1 (same-day-of-week-of-next-week calendar-date1)))
+    (unless (= (calendar-date-month calendar-date)
+               (calendar-date-month calendar-date1))
+      (error "The value of NTH is invalid."))
     calendar-date1))
 
 (defun next-month (calendar-date)
