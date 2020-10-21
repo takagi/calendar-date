@@ -66,7 +66,7 @@
 
 (defun day-of-week (year month day)
   "Compute day of week in Gregorian calendar by Zeller's congruence."
-  (check-type year (integer 0 9999))
+  (check-type year (integer 1 9999))
   (check-type month (integer 1 12))
   (check-type day (integer 1 31))
   (unless (<= day (last-day-of-year-month year month))
@@ -89,7 +89,7 @@
   (day :day :type integer :read-only t))
 
 (defun calendar-date (year month day)
-  (check-type year (integer 0 9999))
+  (check-type year (integer 1 9999))
   (check-type month (integer 1 12))
   (check-type day (integer 1 31))
   (unless (<= day (last-day-of-year-month year month))
