@@ -7,6 +7,7 @@
            :calendar-date-month
            :calendar-date-day
            :calendar-date-values
+           :calendar-date-in-week
            :calendar-date-day-of-week
            :calendar-date=
            :calendar-date/=
@@ -106,6 +107,62 @@
   (values (calendar-date-year calendar-date)
           (calendar-date-month calendar-date)
           (calendar-date-day calendar-date)))
+
+(defun %weeks-per-year (year)
+  ;; ref. https://en.wikipedia.org/wiki/ISO_week_date#Last_week
+  (flet ((p (y)
+           (mod (+ y (floor y 4) (- (floor y 100)) (floor y 400))
+                7)))
+    (if (or (= 4 (p year))
+            (= 3 (p (1- year))))
+        53
+        52)))
+
+(defun %long-year-p (year)
+  (= (%weeks-per-year year) 53))
+
+(defun %days-of-year (year)
+  (if (leap-year-p year)
+      366
+      365))
+
+(defun %doy (year woy dow)
+  ;; https://en.wikipedia.org/wiki/ISO_week_date#Calculating_an_ordinal_or_month_date_from_a_week_date
+  (let ((d (- (+ (* woy 7) dow)
+              (day-of-week year 1 4)
+              3)))
+    (cond
+      ((< d 1) (let* ((year1 (1- year))
+                      (doy (+ d (%days-of-year year1))))
+                 (values year1 doy)))
+      ((> d (%days-of-year year)) (let ((doy (- d (%days-of-year year))))
+                                    (values (1+ year) doy)))
+      (t (values year d)))))
+
+(defparameter +days-of-month+
+  '(31 28 31 30 31 30 31 31 30 31 30 31))
+
+(defun %date-from-doy (year doy)
+  (loop with month = 1
+        for days in +days-of-month+
+     when (and (leap-year-p year)
+               (= month 2))
+     do (incf days)
+     when (<= doy days)
+     return (values month doy)
+     do (incf month)
+        (decf doy days)))
+
+(defun calendar-date-in-week (year woy dow)
+  (check-type year (integer 1 9999))
+  (check-type woy (integer 1 53))
+  (check-type dow (integer 1 7))
+  (when (= woy 53)
+    (unless (%long-year-p year)
+      (error "~A is a short year." year)))
+  (multiple-value-bind (year1 doy) (%doy year woy dow)
+    (multiple-value-bind (month day) (%date-from-doy year1 doy)
+      (%make-calendar-date :year year1 :month month :day day))))
 
 (defun calendar-date-day-of-week (calendar-date)
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
