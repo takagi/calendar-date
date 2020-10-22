@@ -29,18 +29,18 @@
   (is (calendar-date::leap-year-p 2000)
       t))
 
-(subtest "last-day-of-the-month"
+(subtest "%days-of-month"
 
-  (is (calendar-date::last-day-of-year-month 2015 1)
+  (is (calendar-date::%days-of-month 2015 1)
       31)
 
-  (is (calendar-date::last-day-of-year-month 2015 4)
+  (is (calendar-date::%days-of-month 2015 4)
       30)
 
-  (is (calendar-date::last-day-of-year-month 2015 2)
+  (is (calendar-date::%days-of-month 2015 2)
       28)
 
-  (is (calendar-date::last-day-of-year-month 2016 2)
+  (is (calendar-date::%days-of-month 2016 2)
       29))
 
 (subtest "month-name"
@@ -244,6 +244,24 @@
   (is-error (calendar-date-values :foo)
             type-error
             "invalid calendar date."))
+
+(subtest "calendar-date-values-in-week"
+  (is-values (calendar-date-values-in-week (calendar-date 2020 1 1))
+             '(2020 1 3))
+
+  (is-values (calendar-date-values-in-week (calendar-date 2019 12 30))
+             '(2020 1 1))
+
+  (is-values (calendar-date-values-in-week (calendar-date 2019 12 23))
+             '(2019 52 1))
+
+  (is-values (calendar-date-values-in-week (calendar-date 2021 1 3))
+             '(2020 53 7))
+
+  (is-error (calendar-date-values-in-week :foo)
+            type-error
+            "invalid calendar date.")
+  )
 
 (subtest "calendar-date-day-of-week"
 

@@ -9,6 +9,7 @@
            :calendar-date-values
            :calendar-date-in-week
            :calendar-date-day-of-week
+           :calendar-date-values-in-week
            :calendar-date=
            :calendar-date/=
            :calendar-date<
@@ -54,7 +55,7 @@
        (or (/= (mod year 100) 0)
            (= (mod year 400) 0))))
 
-(defun last-day-of-year-month (year month)
+(defun %days-of-month (year month)
   (ecase month
     ((1 3 5 7 8 10 12) 31)
     ((4 6 9 11) 30)
@@ -70,7 +71,7 @@
   (check-type year (integer 1 9999))
   (check-type month (integer 1 12))
   (check-type day (integer 1 31))
-  (unless (<= day (last-day-of-year-month year month))
+  (unless (<= day (%days-of-month year month))
     (error "~A ~S does not have day ~S." (month-name month) year day))
   (flet ((div (x y) (floor (/ x y))))
     (let ((year1 (if (< month 3)
@@ -93,7 +94,7 @@
   (check-type year (integer 1 9999))
   (check-type month (integer 1 12))
   (check-type day (integer 1 31))
-  (unless (<= day (last-day-of-year-month year month))
+  (unless (<= day (%days-of-month year month))
     (error "~A ~S does not have day ~S." (month-name month) year day))
   (%make-calendar-date :year year :month month :day day))
 
@@ -126,7 +127,7 @@
       366
       365))
 
-(defun %doy (year woy dow)
+(defun %ordinal-date-from-week-date (year woy dow)
   ;; https://en.wikipedia.org/wiki/ISO_week_date#Calculating_an_ordinal_or_month_date_from_a_week_date
   (let ((d (- (+ (* woy 7) dow)
               (day-of-week year 1 4)
@@ -144,10 +145,7 @@
 
 (defun %date-from-doy (year doy)
   (loop with month = 1
-        for days in +days-of-month+
-     when (and (leap-year-p year)
-               (= month 2))
-     do (incf days)
+     for days = (%days-of-month year month)
      when (<= doy days)
      return (values month doy)
      do (incf month)
@@ -160,13 +158,38 @@
   (when (= woy 53)
     (unless (%long-year-p year)
       (error "~A is a short year." year)))
-  (multiple-value-bind (year1 doy) (%doy year woy dow)
+  (multiple-value-bind (year1 doy) (%ordinal-date-from-week-date year woy dow)
     (multiple-value-bind (month day) (%date-from-doy year1 doy)
       (%make-calendar-date :year year1 :month month :day day))))
 
 (defun calendar-date-day-of-week (calendar-date)
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (day-of-week year month day)))
+
+(defparameter +offset-ordinal-date+
+  '(0 31 59 90 120 151 181 212 243 273 304 334))
+
+(defparameter +offset-ordinal-date-leap+
+  '(0 31 60 91 121 152 182 213 244 274 305 335))
+
+(defun %ordinal-date-from-month-date (year month day)
+  ;; https://en.wikipedia.org/wiki/ISO_week_date#Calculating_the_week_number_from_a_month_and_day_of_the_month_or_ordinal_date
+  (let ((offset (if (leap-year-p year)
+                    +offset-ordinal-date-leap+
+                    +offset-ordinal-date+)))
+    (+ (nth (1- month) offset) day)))
+
+(defun calendar-date-values-in-week (calendar-date)
+  (multiple-value-bind (year month day) (calendar-date-values calendar-date)
+    (let* ((doy (%ordinal-date-from-month-date year month day))
+           (dow (day-of-week year month day))
+           (w (floor (+ (- doy dow) 10) 7)))
+      (cond
+        ((< w 1) (let* ((year1 (1- year))
+                        (woy (%weeks-per-year year1)))
+                   (values year1 woy dow)))
+        ((> w (%weeks-per-year year)) (values (1+ year) 1 dow))
+        (t (values year w dow))))))
 
 (defun calendar-date= (calendar-date1 calendar-date2)
   (multiple-value-bind (year1 month1 day1)
@@ -212,7 +235,7 @@
 (defun next-day (calendar-date)
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (incf day)
-    (when (> day (last-day-of-year-month year month))
+    (when (> day (%days-of-month year month))
       (setf day 1)
       (incf month))
     (when (> month 12)
@@ -230,7 +253,7 @@
             (decf year)
             (setf month 12)
             (setf day 31))
-          (setf day (last-day-of-year-month year month))))
+          (setf day (%days-of-month year month))))
     (calendar-date year month day)))
 
 (defun next-weekday (calendar-date)
@@ -314,7 +337,7 @@
       (multiple-value-bind (year1 month1 day1)
           (calendar-date-values calendar-date1)
         (declare (ignore day1))
-        (let ((nth (min day (last-day-of-year-month year1 month1))))
+        (let ((nth (min day (%days-of-month year1 month1))))
           (nth-of-the-month nth calendar-date1))))))
 
 (defun same-day-of-previous-month (calendar-date)
@@ -323,7 +346,7 @@
       (multiple-value-bind (year1 month1 day1)
           (calendar-date-values calendar-date1)
         (declare (ignore day1))
-        (let ((nth (min day (last-day-of-year-month year1 month1))))
+        (let ((nth (min day (%days-of-month year1 month1))))
           (nth-of-the-month nth calendar-date1))))))
 
 (defun first-of-the-month (calendar-date)
@@ -333,7 +356,7 @@
   (check-type nth (integer 1 31))
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (declare (ignore day))
-    (unless (<= nth (last-day-of-year-month year month))
+    (unless (<= nth (%days-of-month year month))
       (error "~A ~S does not have day ~S." (month-name month) year nth)))
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (declare (ignore day))
@@ -355,7 +378,7 @@
 (defun last-day-of-the-month (calendar-date)
   (multiple-value-bind (year month day) (calendar-date-values calendar-date)
     (declare (ignore day))
-    (let ((day1 (last-day-of-year-month year month)))
+    (let ((day1 (%days-of-month year month)))
       (calendar-date year month day1))))
 
 (defun last-weekday-of-the-month (calendar-date)
