@@ -29,18 +29,18 @@
   (is (calendar-date::leap-year-p 2000)
       t))
 
-(subtest "last-day-of-the-month"
+(subtest "%days-of-month"
 
-  (is (calendar-date::last-day-of-year-month 2015 1)
+  (is (calendar-date::%days-of-month 2015 1)
       31)
 
-  (is (calendar-date::last-day-of-year-month 2015 4)
+  (is (calendar-date::%days-of-month 2015 4)
       30)
 
-  (is (calendar-date::last-day-of-year-month 2015 2)
+  (is (calendar-date::%days-of-month 2015 2)
       28)
 
-  (is (calendar-date::last-day-of-year-month 2016 2)
+  (is (calendar-date::%days-of-month 2016 2)
       29))
 
 (subtest "month-name"
@@ -149,6 +149,77 @@
             simple-error
             "invalid day."))
 
+(subtest "%weeks-per-year"
+  (is (calendar-date::%weeks-per-year 2019)
+      52)
+
+  (is (calendar-date::%weeks-per-year 2020)
+      53)
+  )
+
+(subtest "%long-year-p"
+  (is (calendar-date::%long-year-p 2019)
+      nil)
+
+  (is (calendar-date::%long-year-p 2020)
+      t)
+  )
+
+(subtest "calendar-date-in-week"
+
+  (let ((calendar-date (calendar-date-in-week 2020 1 3)))
+    (is (calendar-date-year calendar-date)
+        2020)
+    (is (calendar-date-month calendar-date)
+        1)
+    (is (calendar-date-day calendar-date)
+        1))
+
+  (let ((calendar-date (calendar-date-in-week 2020 1 1)))
+    (is (calendar-date-year calendar-date)
+        2019)
+    (is (calendar-date-month calendar-date)
+        12)
+    (is (calendar-date-day calendar-date)
+        30))
+
+  (let ((calendar-date (calendar-date-in-week 2019 52 1)))
+    (is (calendar-date-year calendar-date)
+        2019)
+    (is (calendar-date-month calendar-date)
+        12)
+    (is (calendar-date-day calendar-date)
+        23))
+
+  (let ((calendar-date (calendar-date-in-week 2020 53 7)))
+    (is (calendar-date-year calendar-date)
+        2021)
+    (is (calendar-date-month calendar-date)
+        1)
+    (is (calendar-date-day calendar-date)
+        3))
+
+  (is-error (calendar-date-in-week 2020 0 1)
+            type-error
+            "invalid week")
+
+  (is-error (calendar-date-in-week 2019 53 1)
+            simple-error
+            "invalid week")
+
+  (is-error (calendar-date-in-week 2020 54 1)
+            type-error
+            "invalid week")
+
+  (is-error (calendar-date-in-week 2020 1 0)
+            type-error
+            "invalid day of week")
+
+  (is-error (calendar-date-in-week 2020 1 8)
+            type-error
+            "invalid day of week")
+  )
+
 (subtest "calendar-date-today"
 
   (let ((*default-timezone* +utc-zone+))
@@ -173,6 +244,24 @@
   (is-error (calendar-date-values :foo)
             type-error
             "invalid calendar date."))
+
+(subtest "calendar-date-values-in-week"
+  (is-values (calendar-date-values-in-week (calendar-date 2020 1 1))
+             '(2020 1 3))
+
+  (is-values (calendar-date-values-in-week (calendar-date 2019 12 30))
+             '(2020 1 1))
+
+  (is-values (calendar-date-values-in-week (calendar-date 2019 12 23))
+             '(2019 52 1))
+
+  (is-values (calendar-date-values-in-week (calendar-date 2021 1 3))
+             '(2020 53 7))
+
+  (is-error (calendar-date-values-in-week :foo)
+            type-error
+            "invalid calendar date.")
+  )
 
 (subtest "calendar-date-day-of-week"
 
